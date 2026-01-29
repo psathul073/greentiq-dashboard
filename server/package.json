@@ -1,0 +1,26 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Greentiq Dashboard Server",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "pg": "^8.17.2",
+    "@types/express": "^4.17.21",
+    "@types/cors": "^2.8.19",
+    "@types/node": "^20.11.30",
+    "@types/pg": "^8.11.6"
+  },
+  "devDependencies": {
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}
