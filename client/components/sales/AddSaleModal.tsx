@@ -1,6 +1,7 @@
 "use client";
 
 import { createSale } from "@/services/api";
+import { Sale } from "@/types";
 import React, { useState } from "react";
 
 type AddSaleModalProp = {
@@ -9,14 +10,18 @@ type AddSaleModalProp = {
 };
 
 function AddSaleModal({ onClose, onSuccess }: AddSaleModalProp) {
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<Omit<
+        Sale,
+        "id" | "company_id" | "sale_date"
+    >>({
         sale_name: "",
         status: "Open",
         amount: 0,
-        stage: "",
-        stage_percentage: null as number | null,
+        stage: "Proposal",
+        stage_percentage: null,
         next_activity: "",
     });
+
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -60,7 +65,7 @@ function AddSaleModal({ onClose, onSuccess }: AddSaleModalProp) {
                         name="status"
                         value={form.status}
                         onChange={(e) =>
-                            setForm({ ...form, status: e.target.value })
+                            setForm({ ...form, status: e.target.value as Sale["status"] })
                         }
                         className="input"
                         required
@@ -87,16 +92,16 @@ function AddSaleModal({ onClose, onSuccess }: AddSaleModalProp) {
                     <select
                         name="stage"
                         value={form.stage}
-                        onChange={(e) =>
+                        onChange={(e) => {
+                            const value = e.target.value as Sale["stage"];
+
                             setForm({
                                 ...form,
-                                stage: e.target.value,
+                                stage: value,
                                 stage_percentage:
-                                    e.target.value === "Proposal"
-                                        ? form.stage_percentage
-                                        : null, // For clear %
-                            })
-                        }
+                                    value === "Proposal" ? form.stage_percentage : null,
+                            });
+                        }}
                         className="input"
                         required
                     >
@@ -106,6 +111,7 @@ function AddSaleModal({ onClose, onSuccess }: AddSaleModalProp) {
                         <option value="Lost">Lost</option>
                         <option value="Stalled">Stalled</option>
                     </select>
+
 
                     {/* Percentage.. */}
                     {form.stage === "Proposal" && (
